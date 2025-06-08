@@ -3,6 +3,8 @@ services:
     container_name: cathop_app
     restart: unless-stopped
     image: 'ghcr.io/sbeltranc/cathop:latest'
+    environment:
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
     env_file:
       - .env
     depends_on:
@@ -40,6 +42,6 @@ services:
 volumes:
   cathop_db_data:
     external: false
-      
+
 networks:
   cathop_network: null
