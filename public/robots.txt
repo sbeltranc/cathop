@@ -1,0 +1,5 @@
+# normally i dont have restrictions
+# regarding to the robots.txt file
+# but just respect the rate-limits
+# and make proper usage of the api
+# rather than scrapping itself

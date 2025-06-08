@@ -1,0 +1,26 @@
+services:
+  app:
+    container_name: cathop_dev_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env.development
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+
+  db:
+    container_name: cathop_dev_db
+    image: "postgres:latest"
+    volumes:
+      - cathop_dev_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+      
+volumes:
+  cathop_dev_db_data:
+    external: false
