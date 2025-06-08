@@ -1,0 +1,31 @@
+<body class="no-scroll">
+    <div class="scanlines"></div>
+    <nav class="cat-nav">
+        <div class="cat-nav-github">
+            <a class="cat-nav-github-link" href="https://github.com/sbeltranc/cathop">
+              <%= image_tag "github.svg", class: "github-icon", alt: "GitHub", width: 35, height: 35 %>
+            </a>
+        </div>
+        
+        <div class="cat-nav-center">
+            <a class="cat-brand" href="/">cathop.lat</a>
+        </div>
+    </nav>
+
+      <div class="content-wrapper">
+        <div class="cat-header">
+            <div class="cat-header-box">
+                <div class="cat-noise-wrapper">
+                    <div class="cat-noise"></div>
+                </div>
+                <%= image_tag "cathop_logo.png", alt: "Header Image", class: "cat-logo", loading: "eager" %>
+            </div>
+        </div>
+        <section class="cat-search">
+            <div class="cat-search-bar">
+                <input id="searchInput" type="text" placeholder="<%= t("search_placeholder") %>" aria-label="Search">
+                <button id="searchButton" type="button"><%= t("search_button") %></button>
+            </div>
+        </section>
+    </div>
+</body>

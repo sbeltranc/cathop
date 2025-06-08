@@ -28,4 +28,5 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  search_placeholder: "input your query..."
+  search_button: "analyze :3"

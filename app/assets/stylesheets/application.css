@@ -1,12 +1,272 @@
-/*
-* haiiii!
-* this code is a MESS
-* this is the first time i'm using plain css
-* rather than a css framework like tailwind
-* if you see this, it worked out and managed to make it out
-* on the commits!
-*
-* please do not learn of this. check the web.archive.org of kry.pt as well, it's quite similar
-* - sbeltranc
-*/
+:root {
+    --bgc: #000000;
+    --fgc: #aaa;
+    --active: #ddd;
+    --back: #555;
+    --alt: #888;
+    --overlaycolor: rgba(0, 0, 0, 0.7);
+    --empc: #555;
+    --focus: none;
+    --filter: none;
+    --btn-bg: #0F0F0F;
+    --btn-color: #A9A9A9;
+    --btn-border: #3C3C3C;
+    --btn-hover-bg: #3C3C3C;
+    --btn-hover-color: #FFFFFF;
+    --btn-hover-border: #3C3C3C;
+    --transition-duration: 0.5s;
+    --screen-background: #000000;
+}
 
+@keyframes noise {
+    0% { transform: translate(0px, 0px); }
+    10% { transform: translate(-100px, 100px); }
+    20% { transform: translate(150px, -100px); }
+    30% { transform: translate(-100px, 100px); }
+    40% { transform: translate(100px, -150px); }
+    50% { transform: translate(-100px, 200px); }
+    60% { transform: translate(-200px, -100px); }
+    70% { transform: translate(50px, 100px); }
+    80% { transform: translate(100px, -150px); }
+    90% { transform: translate(0px, 200px); }
+    100% { transform: translate(-100px, 100px); }
+}
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: 
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 50%,
+            rgba(0, 0, 0, 0.25) 50%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 0, 0, 0.06),
+            rgba(0, 255, 0, 0.02),
+            rgba(0, 0, 255, 0.06)
+        );
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bgc);
+    color: #A9A9A9;
+    font-family: 'Pixelify Sans', sans-serif;
+    cursor: crosshair;
+    position: relative;
+    overflow-x: hidden;
+    user-select: none;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+.cat-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(10, 10, 10, 0.9);
+    border: 2px solid #3C3C3C;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1001; 
+    box-sizing: border-box;
+    border-radius: 0;
+}
+
+.cat-nav-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.cat-nav-github {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.cat-nav-github-link {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    filter: invert(1);
+}
+
+.cat-brand {
+    color: inherit;
+    font-size: 1.2rem;
+    text-transform: lowercase;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.cat-header {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 70px;
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+.cat-header-box {
+    width: 100%;
+    max-width: 995px;
+    margin: 0 auto;
+    background-color: #040404;
+    padding: 20px;
+    border: 2px solid #262626;
+    opacity: 0.794;
+    box-sizing: border-box;
+    border-radius: 0;
+    height: auto;
+    min-height: 291px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cat-noise-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.cat-noise-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%);
+}
+
+.cat-noise {
+    position: absolute;
+    top: -500px;
+    right: -500px;
+    bottom: -500px;
+    left: -500px;
+    background: transparent url(https://cdn.cathop.lat/noise.png) 0 0;
+    background-size: 320px 320px;
+    opacity: 0.35;
+    animation: noise 1s steps(8,end) infinite both;
+}
+
+.cat-logo {
+    width: 100%;
+    max-width: 495px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 0;
+    position: relative;
+    filter: brightness(1.2) opacity(0.6);
+    z-index: 2;
+}
+
+.cat-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    margin-top: -14px;
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.cat-search-bar {
+    width: 90%;
+    max-width: 854px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.cat-search-bar input[type="text"] {
+    flex: 2 1 383px;
+    min-width: 200px;
+    height: 40px;
+    background-color: #060606;
+    color: #A9A9A9;
+    border: 2px solid #3C3C3C;
+    font-family: 'Pixelify Sans', sans-serif;
+    padding: 0 10px;
+    text-align: left;
+    box-sizing: border-box;
+    border-radius: 0;
+}
+
+.cat-search-bar input[type="text"]:hover {
+    border-color: #3C3C3C;
+}
+
+.cat-search-bar input[type="text"]:focus {
+    border-color: #3C3C3C;
+    outline: none;
+}
+
+.cat-search-bar button {
+    flex: 1 1 119px;
+    height: 40px;
+    background-color: #060606;
+    color: var(--btn-color);
+    border: 2px solid var(--btn-border);
+    font-family: 'Pixelify Sans', sans-serif;
+    text-transform: uppercase;
+    padding: 0 20px;
+    cursor: pointer;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+}
+
+.cat-search-bar button:hover {
+    background-color: #3C3C3C;
+    color: #FFFFFF;
+    border-color: #3C3C3C;
+    opacity: 0.85;
+}
+
+.cat-search-bar button:focus {
+    outline: none;
+    border-color: #3C3C3C;
+}
