@@ -29,4 +29,14 @@
 
 en:
   search_placeholder: "input your query..."
-  search_button: "analyze :3"
+  github_text: "star on github pls!!!"
+  service_messages:
+    youtube: "this is a youtube link, you can look up information about the video or download it"
+    ip: "this is an ip address, you can look up information about it"
+    roblox: "this is a roblox profile, you can look up information about the user"
+    spotify: "this is a spotify link, you can look up information about the song or album"
+    soundcloud: "this is a soundcloud link, you can look up information about the song or album"
+    domain: "this is a domain, you can look up icann information about it"
+    base64: "this is a base64 encoded string, you can decode it"
+    unknown: "couldn't figure out what is this :("
+    generic_url: "this is an url, we can request it and see what it returns"

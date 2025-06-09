@@ -4,7 +4,7 @@
         <div class="cat-nav-github">
             <a class="cat-nav-github-link" href="https://github.com/sbeltranc/cathop">
               <%= image_tag "github.svg", class: "github-icon", alt: "GitHub", width: 35, height: 35 %>
-              <span class="github-text">Star us on GitHub</span>
+              <span class="cat-nav-github-text"><%= t("github_text") %></span>
             </a>
         </div>
         
@@ -23,9 +23,33 @@
             </div>
         </div>
         <section class="cat-search">
-            <div class="cat-search-bar">
-                <input id="searchInput" type="text" placeholder="<%= t("search_placeholder") %>" aria-label="Search">
-                <button id="searchButton" type="button"><%= t("search_button") %></button>
+            <div class="cat-search-bar" 
+                 data-controller="search"
+                 data-search-messages-value="<%= {
+                   ip: t('service_messages.ip'),
+                   roblox: t('service_messages.roblox'),
+                   youtube: t('service_messages.youtube'),
+                   spotify: t('service_messages.spotify'),
+                   soundcloud: t('service_messages.soundcloud'),
+                   base64: t('service_messages.base64'),
+                   domain: t('service_messages.domain'),
+                   unknown: t('service_messages.unknown'),
+                   generic_url: t('service_messages.generic_url')
+                 }.to_json %>">
+                <div class="link-type-message" data-search-target="message"></div>
+                <div class="search-input-group">
+                    <input id="searchInput" 
+                           type="text" 
+                           placeholder="<%= t("search_placeholder") %>" 
+                           aria-label="Search"
+                           data-search-target="input">
+                    <button id="searchButton" type="button" aria-label="Search">
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="currentColor" d="M6 1h3v1h2v1h1v2h1v3h-1v1h-1v1H9v1H6v-1H4v-1H3V6H2V3h1V2h1V1h2z"/>
+                            <path fill="currentColor" d="M11 11h1v1h1v1h1v1h-1v1h-1v-1h-1v-1h-1v-1h1z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </section>
     </div>

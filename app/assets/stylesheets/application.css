@@ -1,5 +1,5 @@
 :root {
-    --bgc: #000000;
+    --bgc: #0a0a0a;
     --fgc: #aaa;
     --active: #ddd;
     --back: #555;
@@ -8,14 +8,14 @@
     --empc: #555;
     --focus: none;
     --filter: none;
-    --btn-bg: #0F0F0F;
+    --btn-bg: #030303;
     --btn-color: #A9A9A9;
-    --btn-border: #3C3C3C;
+    --btn-border: #4a4a4a;
     --btn-hover-bg: #3C3C3C;
     --btn-hover-color: #FFFFFF;
-    --btn-hover-border: #3C3C3C;
+    --btn-hover-border: #5a5a5a;
     --transition-duration: 0.5s;
-    --screen-background: #000000;
+    --screen-background: #0a0a0a;
 }
 
 @keyframes noise {
@@ -81,7 +81,7 @@ html, body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: rgba(10, 10, 10, 0.9);
+    background-color: rgba(5, 5, 5, 0.97);
     border: 2px solid #3C3C3C;
     position: fixed;
     width: 100%;
@@ -102,14 +102,31 @@ html, body {
 .cat-nav-github {
     display: flex;
     align-items: center;
-    margin-right: 10px;
+    margin-right: 0;
+    position: relative;
+    z-index: 2;
+    gap: 8px;
+    padding: 0 10px;
+}
+
+.cat-nav-github-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    white-space: nowrap;
+    padding: 0 5px;
 }
 
 .cat-nav-github-link {
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
+    width: 25px;
+    height: 25px;
     filter: invert(1);
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    flex-shrink: 0;
 }
 
 .cat-brand {
@@ -135,9 +152,9 @@ html, body {
     width: 100%;
     max-width: 995px;
     margin: 0 auto;
-    background-color: #040404;
+    background-color: #030303;
     padding: 20px;
-    border: 2px solid #262626;
+    border: 2px solid #4a4a4a;
     opacity: 0.794;
     box-sizing: border-box;
     border-radius: 0;
@@ -208,65 +225,79 @@ html, body {
     width: 100%;
 }
 
+.search-input-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
 .cat-search-bar {
     width: 90%;
     max-width: 854px;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     gap: 10px;
     margin-bottom: 10px;
 }
 
 .cat-search-bar input[type="text"] {
-    flex: 2 1 383px;
-    min-width: 200px;
+    flex: 1;
     height: 40px;
-    background-color: #060606;
+    background-color: #030303;
     color: #A9A9A9;
-    border: 2px solid #3C3C3C;
+    border: 2px solid #4a4a4a;
     font-family: 'Pixelify Sans', sans-serif;
-    padding: 0 10px;
+    padding: 0 15px;
     text-align: left;
     box-sizing: border-box;
     border-radius: 0;
+    transition: all 0.2s ease;
 }
 
 .cat-search-bar input[type="text"]:hover {
-    border-color: #3C3C3C;
+    border-color: #5a5a5a;
 }
 
 .cat-search-bar input[type="text"]:focus {
-    border-color: #3C3C3C;
-    outline: none;
+    border-color: #5a5a5a;
 }
 
 .cat-search-bar button {
-    flex: 1 1 119px;
+    flex: 0 0 50px;
     height: 40px;
-    background-color: #060606;
+    background-color: #030303;
     color: var(--btn-color);
-    border: 2px solid var(--btn-border);
-    font-family: 'Pixelify Sans', sans-serif;
-    text-transform: uppercase;
-    padding: 0 20px;
+    border: 2px solid #4a4a4a;
+    padding: 0;
     cursor: pointer;
-    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    font-size: 12px;
+    transition: all 0.2s ease;
 }
 
 .cat-search-bar button:hover {
-    background-color: #3C3C3C;
-    color: #FFFFFF;
-    border-color: #3C3C3C;
-    opacity: 0.85;
+    background-color: #1a1a1a;
 }
 
 .cat-search-bar button:focus {
     outline: none;
-    border-color: #3C3C3C;
+    border-color: #5a5a5a;
+}
+
+.link-type-message {
+    font-family: 'Pixelify Sans', sans-serif;
+    height: 20px;
+    margin-bottom: 10px;
+    color: #aaa;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: all 0.2s ease;
+}
+
+.link-type-message.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
