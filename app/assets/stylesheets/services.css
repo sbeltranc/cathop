@@ -1,115 +1,115 @@
-.cat-search-bar input[type="text"].invalid-url {
+.cat-search-bar input[type="text"].cat-invalid-url {
     color: #A9A9A9;
     border-color: #1a1a1a;
     background-color: #000000;
 }
 
-.cat-search-bar input[type="text"].unknown-url {
+.cat-search-bar input[type="text"].cat-unknown-url {
     color: #FFFFFF;
     border-color: #FFFFFF;
     background-color: #1a1a1a;
 }
 
-.cat-search-bar input[type="text"].ip-url {
+.cat-search-bar input[type="text"].cat-ip-url {
     color: #00ffcc;
     border-color: #00ffcc;
 }
 
-.cat-search-bar input[type="text"].youtube-url {
+.cat-search-bar input[type="text"].cat-youtube-url {
     color: #ff4444;
     border-color: #ff4444;
 }
 
-.cat-search-bar input[type="text"].spotify-url {
+.cat-search-bar input[type="text"].cat-spotify-url {
     color: #1DB954;
     border-color: #1DB954;
 }
 
-.cat-search-bar input[type="text"].soundcloud-url {
+.cat-search-bar input[type="text"].cat-soundcloud-url {
     color: #ff7700;
     border-color: #ff7700;
 }
 
-.cat-search-bar input[type="text"].roblox-url {
+.cat-search-bar input[type="text"].cat-roblox-url {
     color: #007aff;
     border-color: #007aff;
 }
 
-.cat-search-bar input[type="text"].base64-url {
+.cat-search-bar input[type="text"].cat-base64-url {
     color: #9966ff;
     border-color: #9966ff;
 }
 
-.cat-search-bar input[type="text"].domain-url {
+.cat-search-bar input[type="text"].cat-domain-url {
     color: #ff5733;
     border-color: #ff5733;
 }
 
-.cat-search-bar input[type="text"].youtube-url::placeholder {
+.cat-search-bar input[type="text"].cat-youtube-url::placeholder {
     color: rgba(255, 68, 68, 0.6);
 }
 
-.cat-search-bar input[type="text"].spotify-url::placeholder {
+.cat-search-bar input[type="text"].cat-spotify-url::placeholder {
     color: rgba(29, 185, 84, 0.6);
 }
 
-.cat-search-bar input[type="text"].soundcloud-url::placeholder {
+.cat-search-bar input[type="text"].cat-soundcloud-url::placeholder {
     color: rgba(255, 119, 0, 0.6);
 }
 
-.cat-search-bar input[type="text"].roblox-url::placeholder {
+.cat-search-bar input[type="text"].cat-roblox-url::placeholder {
     color: rgba(0, 122, 255, 0.6);
 }
 
-.cat-search-bar input[type="text"].base64-url::placeholder {
+.cat-search-bar input[type="text"].cat-base64-url::placeholder {
     color: rgba(153, 102, 255, 0.6);
 }
 
-.cat-search-bar input[type="text"].domain-url::placeholder {
+.cat-search-bar input[type="text"].cat-domain-url::placeholder {
     color: rgba(255, 87, 51, 0.6);
 }
 
-.cat-search-bar input[type="text"].generic-url {
+.cat-search-bar input[type="text"].cat-generic-url {
     color: #4169e1;
     border-color: #4169e1;
 }
 
-.cat-search-bar input[type="text"].generic-url::placeholder {
+.cat-search-bar input[type="text"].cat-generic-url::placeholder {
     color: rgba(65, 105, 225, 0.6);
 }
 
-.link-type-message.unknown {
+.cat-message.cat-unknown {
     color: #FFFFFF;
 }
 
-.link-type-message.ip {
+.cat-message.cat-ip {
     color: #00ffcc;
 }
 
-.link-type-message.youtube {
+.cat-message.cat-youtube {
     color: #ff4444;
 }
 
-.link-type-message.spotify {
+.cat-message.cat-spotify {
     color: #1DB954;
 }
 
-.link-type-message.soundcloud {
+.cat-message.cat-soundcloud {
     color: #ff7700;
 }
 
-.link-type-message.roblox {
+.cat-message.cat-roblox {
     color: #007aff;
 }
 
-.link-type-message.base64 {
+.cat-message.cat-base64 {
     color: #9966ff;
 }
 
-.link-type-message.domain {
+.cat-message.cat-domain {
     color: #ff5733;
 }
 
-.link-type-message.generic {
+.cat-message.cat-generic {
     color: #4169e1;
 } 

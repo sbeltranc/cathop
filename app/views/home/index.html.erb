@@ -1,9 +1,9 @@
-<body class="no-scroll">
-    <div class="scanlines"></div>
+<body class="cat-no-scroll">
+    <div class="cat-scanlines"></div>
     <nav class="cat-nav">
         <div class="cat-nav-github">
             <a class="cat-nav-github-link" href="https://github.com/sbeltranc/cathop">
-              <%= image_tag "github.svg", class: "github-icon", alt: "GitHub", width: 35, height: 35 %>
+              <%= image_tag "github.svg", class: "cat-github-icon", alt: "GitHub", width: 35, height: 35 %>
               <span class="cat-nav-github-text"><%= t("github_text") %></span>
             </a>
         </div>
@@ -13,7 +13,7 @@
         </div>
     </nav>
 
-      <div class="content-wrapper">
+    <div class="cat-content-wrapper">
         <div class="cat-header">
             <div class="cat-header-box">
                 <div class="cat-noise-wrapper">
@@ -24,7 +24,7 @@
         </div>
         <section class="cat-search">
             <div class="cat-search-bar" 
-                 data-controller="search"
+                 data-controller="search url base64 ip domain"
                  data-search-messages-value="<%= {
                    ip: t('service_messages.ip'),
                    roblox: t('service_messages.roblox'),
@@ -36,8 +36,8 @@
                    unknown: t('service_messages.unknown'),
                    generic_url: t('service_messages.generic_url')
                  }.to_json %>">
-                <div class="link-type-message" data-search-target="message"></div>
-                <div class="search-input-group">
+                <div class="cat-message" data-search-target="message"></div>
+                <div class="cat-search-input-group">
                     <input id="searchInput" 
                            type="text" 
                            placeholder="<%= t("search_placeholder") %>" 
@@ -50,6 +50,10 @@
                         </svg>
                     </button>
                 </div>
+                <div data-search-target="url" data-controller="url"></div>
+                <div data-search-target="base64" data-controller="base64"></div>
+                <div data-search-target="ip" data-controller="ip"></div>
+                <div data-search-target="domain" data-controller="domain"></div>
             </div>
         </section>
     </div>

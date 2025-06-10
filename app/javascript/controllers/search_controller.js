@@ -1,121 +1,198 @@
 import { Controller } from "@hotwired/stimulus"
 
-export default class extends Controller {
-  static targets = ["input", "message"]
-  static values = {
-    messages: Object
-  }
+const URL_PATTERNS = {
+  youtube: [
+    /^(?:https?:\/\/)?(?:www\.)?(youtube\.com\/watch\?v=[\w-]+|youtu\.be\/[\w-]+)/i
+  ],
+  roblox: [
+    /^(?:https?:\/\/)?(?:www\.)?roblox\.com\/users\/[\w-]+\/profile/i
+  ],
+  spotify: [
+    /^(?:https?:\/\/)?(?:open\.)?spotify\.com\/(track|album|playlist)\/[\w-]+/i
+  ],
+  soundcloud: [
+    /^(?:https?:\/\/)?(?:www\.)?soundcloud\.com\/[\w-]+\/[\w-]+/i
+  ]
+}
 
-  urlPatterns = {
-    youtube: [
-      /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/i,
-      /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]+(&\S*)?$/i,
-      /^(https?:\/\/)?(www\.)?youtu\.be\/[\w-]+(\?\S*)?$/i
-    ],
-    roblox: [
-      /^(https?:\/\/)?(www\.)?roblox\.com\/users\/[\w-]+\/profile(\?\S*)?$/i,
-    ],
-    spotify: [
-      /^(https?:\/\/)?(open\.)?spotify\.com\/track\/[\w-]+(&\S*)?$/i,
-      /^(https?:\/\/)?(open\.)?spotify\.com\/album\/[\w-]+(&\S*)?$/i,
-      /^(https?:\/\/)?(open\.)?spotify\.com\/playlist\/[\w-]+(&\S*)?$/i,
-    ],
-    soundcloud: [
-      /^(https?:\/\/)?(www\.)?soundcloud\.com\/[\w-]+\/[\w-]+(&\S*)?$/i,
-    ],
-  }
+const INPUT_PATTERNS = {
+  domain: /^(?!:\/\/)([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}$/,
+  url: /^(?:https?:\/\/)?([\w-]*[a-zA-Z][\w-]*\.)+[\w-]+(?:\/[\w-./?%&=]*)?$/i,
+  base64: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/,
+  ip: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(?:(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:|(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,5}(?::[0-9a-fA-F]{1,4}){1,2}|(?:[0-9a-fA-F]{1,4}:){1,4}(?::[0-9a-fA-F]{1,4}){1,3}|(?:[0-9a-fA-F]{1,4}:){1,3}(?::[0-9a-fA-F]{1,4}){1,4}|(?:[0-9a-fA-F]{1,4}:){1,2}(?::[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:(?:(?::[0-9a-fA-F]{1,4}){1,6})|:(?:(?::[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(?::[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(?:ffff(?::0{1,4}){0,1}:){0,1}(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])|(?:[0-9a-fA-F]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/
+}
+
+export default class SearchController extends Controller {
+  static targets = ["input", "message", "url", "base64", "ip", "domain"]
+  static values = { messages: Object }
+
+  #currentService = null
+  #searchButton = null
+  #boundValidateInput = null
+  #boundHandleSearch = null
 
   connect() {
-    this.validateInput = this.validateInput.bind(this)
-    this.inputTarget.addEventListener('input', this.validateInput)
-    this.currentService = null
+    this.#searchButton = document.getElementById('searchButton')
+    this.#bindEventListeners()
   }
 
   disconnect() {
-    this.inputTarget.removeEventListener('input', this.validateInput)
+    this.#unbindEventListeners()
   }
 
-  validateInput(event) {
+  async #handleSearch(event) {
+    event.preventDefault()
+    
+    const input = this.inputTarget.value.trim()
+    if (!input) return
+
+    try {
+      this.#showLoading()
+      const response = await this.#processInput(input)
+      if (response) {
+        this.#updateResponse(response)
+      }
+    } catch (error) {
+      console.error('Search error:', error)
+      this.#showError(error.message || 'An error occurred while processing the request')
+    } finally {
+      this.#hideLoading()
+    }
+  }
+
+  async #processInput(input) {
+    if (!this.#currentService) {
+      if (this.#looksLikeUrl(input)) {
+        return await this.#handleUrlInput(input)
+      }
+      this.#showError(this.messagesValue.unknown)
+      return null
+    }
+
+    const controller = this.#getServiceController()
+    return controller ? await controller.handle(input) : null
+  }
+
+  #validateInput(event) {
     const value = event.target.value.trim()
-    this.clearStates()
+    this.#resetState()
     
-    if (!value) {
-      return
+    if (!value) return
+
+    const inputType = this.#determineInputType(value)
+    if (inputType) {
+      this.#updateUIForInputType(inputType, value)
+    } else {
+      this.#showUnknownState()
+    }
+  }
+
+  #determineInputType(value) {
+    for (const [type, pattern] of Object.entries(INPUT_PATTERNS)) {
+      if (pattern.test(value)) return type
     }
 
-    const domainPattern = /^(?!:\/\/)([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}$/
-    const urlPattern = /^(https?:\/\/)?([\w-]*[a-zA-Z][\w-]*\.)+[\w-]+(\/[\w- ./?%&=]*)?$/i
-    const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
-    const ipAddressPattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(?:(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:|(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,5}(?::[0-9a-fA-F]{1,4}){1,2}|(?:[0-9a-fA-F]{1,4}:){1,4}(?::[0-9a-fA-F]{1,4}){1,3}|(?:[0-9a-fA-F]{1,4}:){1,3}(?::[0-9a-fA-F]{1,4}){1,4}|(?:[0-9a-fA-F]{1,4}:){1,2}(?::[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:(?:(?::[0-9a-fA-F]{1,4}){1,6})|:(?:(?::[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(?::[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(?:ffff(?::0{1,4}){0,1}:){0,1}(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])|(?:[0-9a-fA-F]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/
-    
-    const isDomain = domainPattern.test(value)
-    const isUrl = urlPattern.test(value)
-    const isBase64 = base64Pattern.test(value)
-    const isIpAddress = ipAddressPattern.test(value)
-
-    switch (true) {
-      case isDomain: {
-        this.currentService = 'domain'
-        this.inputTarget.classList.add('domain-url')
-        this.messageTarget.textContent = this.messagesValue.domain
-        this.messageTarget.classList.add('visible', 'domain')
-        return
-      }
-      case isIpAddress: {
-        this.currentService = 'ip'
-        this.inputTarget.classList.add('ip-url')
-        this.messageTarget.textContent = this.messagesValue.ip
-        this.messageTarget.classList.add('visible', 'ip')
-        return
-      }
-      case isBase64: {
-        this.currentService = 'base64'
-        this.inputTarget.classList.add('base64-url')
-        this.messageTarget.textContent = this.messagesValue.base64
-        this.messageTarget.classList.add('visible', 'base64')
-        return
-      }
-      case isUrl: {
-        for (const [service, patterns] of Object.entries(this.urlPatterns)) {
-          if (patterns.some(pattern => pattern.test(value))) {
-            this.currentService = service
-            this.inputTarget.classList.add(`${service}-url`)
-            
-            const message = this.messagesValue[service]
-            if (message) {
-              this.messageTarget.textContent = message
-              this.messageTarget.classList.add('visible', service)
-            }
-            return
-          }
+    if (INPUT_PATTERNS.url.test(value)) {
+      for (const [service, patterns] of Object.entries(URL_PATTERNS)) {
+        if (patterns.some(pattern => pattern.test(value))) {
+          return service
         }
-        this.currentService = 'generic_url'
-        this.inputTarget.classList.add('generic-url')
-        this.messageTarget.textContent = this.messagesValue.generic_url
-        this.messageTarget.classList.add('visible', 'generic')
-        return
       }
+      return 'generic_url'
+    }
 
-      default:
-        this.showUnknownState()
+    return null
+  }
+
+  #updateUIForInputType(type, value) {
+    this.#currentService = type
+    this.inputTarget.classList.add(`cat-${type}-url`)
+    
+    const message = this.messagesValue[type]
+    if (message) {
+      this.messageTarget.textContent = message
+      this.messageTarget.classList.add('visible', `cat-${type}`)
     }
   }
 
-  clearStates() {
-    if (this.currentService) {
-      this.inputTarget.classList.remove(`${this.currentService}-url`)
-      this.messageTarget.classList.remove('visible', this.currentService)
+  #getServiceController() {
+    const serviceMap = {
+      ip: ['ip', this.ipTarget],
+      base64: ['base64', this.base64Target],
+      domain: ['domain', this.domainTarget],
+      youtube: ['url', this.urlTarget],
+      roblox: ['url', this.urlTarget],
+      spotify: ['url', this.urlTarget],
+      soundcloud: ['url', this.urlTarget],
+      generic_url: ['url', this.urlTarget]
+    }
+
+    const [name, target] = serviceMap[this.#currentService] || []
+    return name ? this.application.getControllerForElementAndIdentifier(target, name) : null
+  }
+
+  async #handleUrlInput(input) {
+    const urlController = this.application.getControllerForElementAndIdentifier(this.urlTarget, 'url')
+    return await urlController.handle(input)
+  }
+
+  #looksLikeUrl(input) {
+    return input.match(/^https?:\/\//i) || input.includes('.')
+  }
+
+  #bindEventListeners() {
+    this.#boundValidateInput = this.#validateInput.bind(this)
+    this.#boundHandleSearch = this.#handleSearch.bind(this)
+    
+    this.inputTarget.addEventListener('input', this.#boundValidateInput)
+    this.#searchButton.addEventListener('click', this.#boundHandleSearch)
+  }
+
+  #unbindEventListeners() {
+    this.inputTarget.removeEventListener('input', this.#boundValidateInput)
+    this.#searchButton.removeEventListener('click', this.#boundHandleSearch)
+  }
+
+  #resetState() {
+    if (this.#currentService) {
+      this.inputTarget.classList.remove(`cat-${this.#currentService}-url`)
+      this.messageTarget.classList.remove('visible', `cat-${this.#currentService}`)
     }
     
-    this.inputTarget.classList.remove('unknown-url', 'generic-url')
-    this.messageTarget.classList.remove('visible', 'unknown', 'generic')
+    this.inputTarget.classList.remove('cat-unknown-url', 'cat-generic-url')
+    this.messageTarget.classList.remove('visible', 'cat-unknown', 'cat-generic')
     this.messageTarget.textContent = ""
-    this.currentService = null
+    this.#currentService = null
   }
 
-  showUnknownState() {
-    this.inputTarget.classList.add('unknown-url')
+  #showUnknownState() {
+    this.inputTarget.classList.add('cat-unknown-url')
     this.messageTarget.textContent = this.messagesValue.unknown
-    this.messageTarget.classList.add('visible', 'unknown')
+    this.messageTarget.classList.add('visible', 'cat-unknown')
+  }
+
+  #showError(message) {
+    this.messageTarget.textContent = message
+    this.messageTarget.classList.remove('loading')
+    this.messageTarget.classList.add('visible', 'error')
+  }
+
+  #showLoading() {
+    this.messageTarget.textContent = "Loading..."
+    this.messageTarget.classList.add('visible', 'loading')
+  }
+
+  #hideLoading() {
+    this.messageTarget.classList.remove('visible', 'loading')
+    this.messageTarget.textContent = ""
+  }
+
+  #updateResponse(container) {
+    const existingContainer = document.querySelector('.cat-response')
+    if (existingContainer) {
+      existingContainer.replaceWith(container)
+    } else {
+      document.querySelector('.cat-content-wrapper').appendChild(container)
+    }
   }
 } 
