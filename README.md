@@ -6,4 +6,4 @@
 ---
 
 > [!IMPORTANT]  
-> cathop is being built at the moment! when there is an stable infrastructure i'll work on this same README.md :)
+> cathop is being built at the moment! when there is an stable infrastructure i'll work on this same README.md :) howeverrrr, you can use the latest image work on https://cathop.lat/
