@@ -10,5 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_13_224209) do
+  create_table "ip_addresses", force: :cascade do |t|
+    t.string "ip_address", null: false
+    t.string "asn", null: false
+    t.string "range", null: false
+    t.string "provider", null: false
+    t.string "organisation", null: false
+    t.string "city", null: false
+    t.string "region", null: false
+    t.string "country", null: false
+    t.string "continent", null: false
+    t.integer "latitude", null: false
+    t.integer "longitude", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 end

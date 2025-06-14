@@ -1,0 +1,2 @@
+class IpAddress < ApplicationRecord
+end

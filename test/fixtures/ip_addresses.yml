@@ -1,0 +1,12 @@
+one:
+  ip_address: "8.8.8.8"
+  asn: "AS15169"
+  range: "8.8.8.0/24"
+  provider: "Google LLC"
+  organisation: "Google LLC"
+  city: "Mountain View"
+  region: "California"
+  country: "United States"
+  continent: "North America"
+  latitude: 37
+  longitude: -122
