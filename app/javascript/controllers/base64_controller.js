@@ -101,29 +101,6 @@ export default class extends Controller {
     `
   }
 
-  copy(event) {
-    const text = event.currentTarget.dataset.text
-    navigator.clipboard.writeText(text)
-      .then(() => this.showCopyFeedback(event.currentTarget))
-      .catch(() => this.showCopyError(event.currentTarget))
-  }
-
-  showCopyFeedback(button) {
-    const originalText = button.textContent
-    button.textContent = 'Copied!'
-    setTimeout(() => {
-      button.textContent = originalText
-    }, 2000)
-  }
-
-  showCopyError(button) {
-    const originalText = button.textContent
-    button.textContent = 'Failed to copy'
-    setTimeout(() => {
-      button.textContent = originalText
-    }, 2000)
-  }
-
   escapeHtml(unsafe) {
     if (!unsafe) return ''
     return String(unsafe)

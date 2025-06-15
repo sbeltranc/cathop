@@ -89,16 +89,17 @@ export default class SearchController extends Controller {
 
   #determineInputType(value) {
     for (const [type, pattern] of Object.entries(INPUT_PATTERNS)) {
-      if (pattern.test(value)) return type
-    }
-
-    if (INPUT_PATTERNS.url.test(value)) {
-      for (const [service, patterns] of Object.entries(URL_PATTERNS)) {
-        if (patterns.some(pattern => pattern.test(value))) {
-          return service
+      if (pattern.test(value)) {
+        if (type === 'url') {
+          for (const [service, patterns] of Object.entries(URL_PATTERNS)) {
+            if (patterns.some(pattern => pattern.test(value))) {
+              return service
+            }
+          }
+          return 'generic_url'
         }
+        return type
       }
-      return 'generic_url'
     }
 
     return null

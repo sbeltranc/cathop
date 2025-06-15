@@ -19,7 +19,7 @@ export default class extends Controller {
 
   async #fetchUrl(url) {
     try {
-      const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`)
+      const response = await fetch(`/api/lookup/url/?url=${encodeURIComponent(url)}`)
       const data = await response.json()
       
       if (!response.ok) {

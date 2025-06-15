@@ -16,8 +16,8 @@
 }
 
 .cat-search-bar input[type="text"].cat-youtube-url {
-    color: #ff4444;
-    border-color: #ff4444;
+    color: #ff6b6b;
+    border-color: #ff6b6b;
 }
 
 .cat-search-bar input[type="text"].cat-spotify-url {
@@ -41,12 +41,12 @@
 }
 
 .cat-search-bar input[type="text"].cat-domain-url {
-    color: #ff5733;
-    border-color: #ff5733;
+    color: #ff8c42;
+    border-color: #ff8c42;
 }
 
 .cat-search-bar input[type="text"].cat-youtube-url::placeholder {
-    color: rgba(255, 68, 68, 0.6);
+    color: rgba(255, 107, 107, 0.6);
 }
 
 .cat-search-bar input[type="text"].cat-spotify-url::placeholder {
@@ -66,7 +66,7 @@
 }
 
 .cat-search-bar input[type="text"].cat-domain-url::placeholder {
-    color: rgba(255, 87, 51, 0.6);
+    color: rgba(255, 140, 66, 0.6);
 }
 
 .cat-search-bar input[type="text"].cat-generic-url {
@@ -87,7 +87,7 @@
 }
 
 .cat-message.cat-youtube {
-    color: #ff4444;
+    color: #ff6b6b;
 }
 
 .cat-message.cat-spotify {
@@ -107,9 +107,14 @@
 }
 
 .cat-message.cat-domain {
-    color: #ff5733;
+    color: #ff8c42;
 }
 
 .cat-message.cat-generic {
     color: #4169e1;
+}
+
+.cat-message.error {
+    color: #ff4444;
+    font-weight: bold;
 } 

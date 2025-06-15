@@ -18,11 +18,11 @@ export default class extends Controller {
   }
 
   async fetchIpInfo(ip) {
-    const response = await fetch(`https://ipapi.co/${ip}/json/`)
+    const response = await fetch(`/api/lookup/ip/${ip}`)
     const data = await response.json()
     
     if (data.error) {
-      throw new Error(data.reason || 'Failed to fetch IP information')
+      throw new Error(data.error || 'Failed to fetch IP information')
     }
     
     return data
@@ -54,8 +54,6 @@ export default class extends Controller {
     const contentSection = document.createElement('div')
     contentSection.className = 'cat-response-content'
     contentSection.innerHTML = [
-      this.renderLocationDetails(data),
-      this.renderNetworkInfo(data),
       this.renderMap(data)
     ].join('')
     
@@ -77,76 +75,18 @@ export default class extends Controller {
     return container
   }
 
-  formatLocation(data) {
-    const parts = [data.city, data.country_name].filter(Boolean)
-    return this.escapeHtml(parts.join(', ') || 'Location unknown')
-  }
-
-  renderLocationDetails(data) {
-    const fields = {
-      'City': data.city,
-      'Region': data.region,
-      'Country': data.country_name,
-      'Postal Code': data.postal
-    }
-
-    const rows = Object.entries(fields)
-      .map(([label, value]) => `
-        <tr>
-          <td class="label">${label}:</td>
-          <td>${this.escapeHtml(value || 'N/A')}</td>
-        </tr>
-      `).join('')
-
-    return `
-      <div class="location-preview">
-        <div class="section-title">Location Details</div>
-        <div class="text-preview">
-          <table>${rows}</table>
-        </div>
-      </div>
-    `
-  }
-
-  renderNetworkInfo(data) {
-    const fields = {
-      'ASN': data.asn,
-      'Organization': data.org,
-      'Timezone': data.timezone
-    }
-
-    const rows = Object.entries(fields)
-      .map(([label, value]) => `
-        <tr>
-          <td class="label">${label}:</td>
-          <td>${this.escapeHtml(value || 'N/A')}</td>
-        </tr>
-      `).join('')
-
-    return `
-      <div class="network-preview">
-        <div class="section-title">Network Information</div>
-        <div class="text-preview">
-          <table>${rows}</table>
-        </div>
-      </div>
-    `
-  }
-
   renderMap(data) {
     if (!data.latitude || !data.longitude) return ''
     
-    const zoom = this.mapZoomValue
     const bbox = {
-      west: data.longitude - zoom,
-      south: data.latitude - zoom,
-      east: data.longitude + zoom,
-      north: data.latitude + zoom
+      west: data.longitude - this.mapZoomValue,
+      south: data.latitude - this.mapZoomValue,
+      east: data.longitude + this.mapZoomValue,
+      north: data.latitude + this.mapZoomValue
     }
     
     return `
       <div class="map-preview">
-        <div class="section-title">Map Location</div>
         <div class="text-preview">
           <div class="map-container">
             <iframe
