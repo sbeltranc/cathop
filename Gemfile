@@ -42,6 +42,7 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "httparty", "~> 0.23.1"
+gem "aws-sdk-s3"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -66,3 +67,5 @@ group :test do
 end
 
 gem "csv", "~> 3.3"
+gem "mp3info"
+gem "dotenv-rails"

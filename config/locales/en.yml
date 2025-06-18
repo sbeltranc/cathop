@@ -29,7 +29,6 @@
 
 en:
   search_placeholder: "input your query..."
-  github_text: "star on github pls!!!"
   service_messages:
     youtube: "this is a youtube link, you can look up information about the video or download it"
     ip: "this is an ip address, you can look up information about it"

@@ -34,10 +34,12 @@ export default class SearchController extends Controller {
   connect() {
     this.#searchButton = document.getElementById('searchButton')
     this.#bindEventListeners()
+    this.#bindSuggestions()
   }
 
   disconnect() {
     this.#unbindEventListeners()
+    this.#unbindSuggestions()
   }
 
   async #handleSearch(event) {
@@ -76,7 +78,7 @@ export default class SearchController extends Controller {
   #validateInput(event) {
     const value = event.target.value.trim()
     this.#resetState()
-    
+    this.#toggleSuggestions(value)
     if (!value) return
 
     const inputType = this.#determineInputType(value)
@@ -194,6 +196,34 @@ export default class SearchController extends Controller {
       existingContainer.replaceWith(container)
     } else {
       document.querySelector('.cat-content-wrapper').appendChild(container)
+    }
+  }
+
+  #bindSuggestions() {
+    const suggestions = document.querySelectorAll('.cat-suggestion')
+    suggestions.forEach(suggestion => {
+      suggestion.addEventListener('click', () => {
+        this.inputTarget.value = suggestion.textContent
+        this.inputTarget.dispatchEvent(new Event('input'))
+      })
+    })
+  }
+
+  #unbindSuggestions() {
+    const suggestions = document.querySelectorAll('.cat-suggestion')
+    suggestions.forEach(suggestion => {
+      suggestion.removeEventListener('click', () => {})
+    })
+  }
+
+  #toggleSuggestions(value) {
+    const suggestions = document.querySelector('.cat-suggestions')
+    if (suggestions) {
+      if (value.length > 0) {
+        suggestions.style.display = 'none'
+      } else {
+        suggestions.style.display = ''
+      }
     }
   }
 } 

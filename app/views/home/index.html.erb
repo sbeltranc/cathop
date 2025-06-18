@@ -3,8 +3,7 @@
     <nav class="cat-nav">
         <div class="cat-nav-github">
             <a class="cat-nav-github-link" href="https://github.com/sbeltranc/cathop">
-              <%= image_tag "github.svg", class: "cat-github-icon", alt: "GitHub", width: 35, height: 35 %>
-              <span class="cat-nav-github-text"><%= t("github_text") %></span>
+              <%= image_tag "github.svg", class: "cat-github-icon", alt: "GitHub", width: 25, height: 25 %>
             </a>
         </div>
         
@@ -42,6 +41,7 @@
                            type="text" 
                            placeholder="<%= t("search_placeholder") %>" 
                            aria-label="Search"
+                           value="<%= @query %>"
                            data-search-target="input">
                     <button id="searchButton" type="button" aria-label="Search">
                         <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,6 +54,18 @@
                 <div data-search-target="base64" data-controller="base64"></div>
                 <div data-search-target="ip" data-controller="ip"></div>
                 <div data-search-target="domain" data-controller="domain"></div>
+            </div>
+            <div class="cat-suggestions">
+                <p class="cat-suggestions-title">try searching for:</p>
+                <div class="cat-suggestions-list">
+                    <span class="cat-suggestion">https://www.youtube.com/watch?v=dQw4w9WgXcQ</span>
+                    <span class="cat-suggestion">8.8.8.8</span>
+                    <span class="cat-suggestion">google.com</span>
+                    <span class="cat-suggestion">SGVsbG8=</span>
+                    <span class="cat-suggestion">https://open.spotify.com/track/6dOtVTDdiauQNBQEDOtlAB</span>
+                    <span class="cat-suggestion">https://soundcloud.com/menthol100s/carve-out-my-left-eye-idiot</span>
+                    <span class="cat-suggestion">https://roblox.com/users/1/profile</span>
+                </div>
             </div>
         </section>
     </div>

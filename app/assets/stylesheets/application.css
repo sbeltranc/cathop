@@ -110,16 +110,6 @@ html, body {
     padding: 0 10px;
 }
 
-.cat-nav-github-text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    white-space: nowrap;
-    padding: 0 5px;
-}
-
 .cat-nav-github-link {
     width: 25px;
     height: 25px;
@@ -554,4 +544,46 @@ html, body {
 
 .cat-info-value {
   word-break: break-all;
+}
+
+.cat-suggestions {
+    text-align: center;
+    color: var(--cat-text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cat-suggestions-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+    opacity: 0.8;
+    font-family: inherit;
+}
+
+.cat-suggestions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cat-suggestion {
+    font-size: 0.85rem;
+    padding: 0.22rem 0.7rem;
+    background: var(--cat-bg-color);
+    border: 1px solid var(--cat-border-color);
+    border-radius: 4px;
+    color: #A9A9A9;
+    opacity: 0.8;
+    transition: opacity 0.2s, background 0.2s;
+    white-space: nowrap;
+}
+
+.cat-suggestion:hover {
+    opacity: 1;
+    background: var(--cat-border-color);
+    cursor: pointer;
 }
