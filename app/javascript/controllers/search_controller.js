@@ -23,7 +23,7 @@ const INPUT_PATTERNS = {
 }
 
 export default class SearchController extends Controller {
-  static targets = ["input", "message", "url", "base64", "ip", "domain"]
+  static targets = ["input", "message", "url", "base64", "ip", "domain", "soundcloud"]
   static values = { messages: Object }
 
   #currentService = null
@@ -126,7 +126,7 @@ export default class SearchController extends Controller {
       youtube: ['url', this.urlTarget],
       roblox: ['url', this.urlTarget],
       spotify: ['url', this.urlTarget],
-      soundcloud: ['url', this.urlTarget],
+      soundcloud: ['soundcloud', this.soundcloudTarget],
       generic_url: ['url', this.urlTarget]
     }
 

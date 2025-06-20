@@ -71,4 +71,48 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     json_response = JSON.parse(@response.body)
     assert_equal "There was no valid IP Addresses supplied.", json_response["error"]
   end
+
+  # SOUNDCLOUD TRACK INFO TESTS
+  test "should fail with no url parameter for track info" do
+    get api_soundcloud_track_info_url
+    assert_response :bad_request
+    json_response = JSON.parse(@response.body)
+    assert_equal "No SoundCloud URL provided. Please add a 'url' query parameter.", json_response["error"]
+  end
+
+  test "should fail with invalid url for track info" do
+    get api_soundcloud_track_info_url(url: "https://example.com")
+    assert_response :bad_request
+    json_response = JSON.parse(@response.body)
+    assert_equal "The provided URL is not a valid SoundCloud URL.", json_response["error"]
+  end
+
+  test "should fail with invalid soundcloud url for track info" do
+    get api_soundcloud_track_info_url(url: "https://soundcloud.com/invalid-track-url")
+    assert_response :not_found
+    json_response = JSON.parse(@response.body)
+    assert_equal "Could not resolve SoundCloud track. Please check if the URL is valid.", json_response["error"]
+  end
+
+  # SOUNDCLOUD DOWNLOAD TESTS
+  test "should fail with no url parameter for download" do
+    get api_soundcloud_download_url
+    assert_response :bad_request
+    json_response = JSON.parse(@response.body)
+    assert_equal "No SoundCloud URL provided. Please add a 'url' query parameter.", json_response["error"]
+  end
+
+  test "should fail with invalid url for download" do
+    get api_soundcloud_download_url(url: "https://example.com")
+    assert_response :bad_request
+    json_response = JSON.parse(@response.body)
+    assert_equal "The provided URL is not a valid SoundCloud URL.", json_response["error"]
+  end
+
+  test "should fail with invalid soundcloud url for download" do
+    get api_soundcloud_download_url(url: "https://soundcloud.com/invalid-track-url")
+    assert_response :not_found
+    json_response = JSON.parse(@response.body)
+    assert_equal "Could not resolve SoundCloud track. Please check if the URL is valid.", json_response["error"]
+  end
 end

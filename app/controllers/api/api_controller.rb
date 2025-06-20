@@ -44,6 +44,141 @@ module Api
       end
     end
 
+    # GET /api/soundcloud/track?url=https://soundcloud.com/artist/track
+    def soundcloud_track_info
+      url = params[:url]
+
+      unless url.present?
+        render_error("No SoundCloud URL provided. Please add a 'url' query parameter.", :bad_request)
+        return nil
+      end
+
+      # Validate that it's a SoundCloud URL
+      unless url.include?("soundcloud.com")
+        render_error("The provided URL is not a valid SoundCloud URL.", :bad_request)
+        return nil
+      end
+
+      begin
+        soundcloud = Soundcloud.new
+        track_data = soundcloud.resolve_track(url)
+
+        if track_data.nil?
+          render_error("Could not resolve SoundCloud track. Please check if the URL is valid.", :not_found)
+          return nil
+        end
+
+        # Extract relevant track information
+        track_info = {
+          id: track_data["id"],
+          title: track_data["title"],
+          artist: track_data.dig("user", "username"),
+          artist_id: track_data.dig("user", "id"),
+          artist_url: track_data.dig("user", "permalink_url"),
+          duration: track_data["duration"],
+          duration_formatted: format_duration(track_data["duration"]),
+          genre: track_data["genre"],
+          description: track_data["description"],
+          artwork_url: track_data["artwork_url"],
+          waveform_url: track_data["waveform_url"],
+          stream_url: track_data["stream_url"],
+          download_url: track_data["download_url"],
+          permalink_url: track_data["permalink_url"],
+          playback_count: track_data["playback_count"],
+          likes_count: track_data["likes_count"],
+          comment_count: track_data["comment_count"],
+          reposts_count: track_data["reposts_count"],
+          created_at: track_data["created_at"],
+          release_date: track_data["release_date"],
+          license: track_data["license"],
+          policy: track_data["policy"],
+          downloadable: track_data["downloadable"],
+          streamable: track_data["streamable"],
+          embeddable_by: track_data["embeddable_by"],
+          purchase_url: track_data["purchase_url"],
+          label_name: track_data["label_name"],
+          publisher_metadata: track_data["publisher_metadata"]
+        }
+
+        render json: {
+          success: true,
+          track: track_info
+        }, status: :ok
+
+      rescue => e
+        Rails.logger.error "SoundCloud track info error: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
+        render_error("Something went wrong while fetching track information.", :internal_server_error)
+      end
+    end
+
+    # GET /api/soundcloud/download?url=https://soundcloud.com/artist/track
+    def soundcloud_download
+      url = params[:url]
+
+      unless url.present?
+        render_error("No SoundCloud URL provided. Please add a 'url' query parameter.", :bad_request)
+        return nil
+      end
+
+      # Validate that it's a SoundCloud URL
+      unless url.include?("soundcloud.com")
+        render_error("The provided URL is not a valid SoundCloud URL.", :bad_request)
+        return nil
+      end
+
+      begin
+        soundcloud = Soundcloud.new
+
+        # First resolve the track to get basic info
+        track_data = soundcloud.resolve_track(url)
+
+        if track_data.nil?
+          render_error("Could not resolve SoundCloud track. Please check if the URL is valid.", :not_found)
+          return nil
+        end
+
+        # Attempt to download the audio
+        download_result = soundcloud.resolve_audio(url)
+
+        case download_result
+        when "fetch.fail"
+          render_error("Failed to fetch track data.", :internal_server_error)
+        when "country.block"
+          render_error("This track is not available in your country.", :forbidden)
+        when "paid.content"
+          render_error("This track requires a paid subscription.", :payment_required)
+        when "fetch.fail.no.mp3"
+          render_error("No MP3 stream available for this track.", :not_found)
+        when "fetch.fail.no.segments"
+          render_error("No audio segments found for this track.", :not_found)
+        when "fetch.fail.no.segments.downloaded"
+          render_error("Failed to download audio segments.", :internal_server_error)
+        when "fetch.fail.no.mp3.stream"
+          render_error("Failed to get MP3 stream URL.", :internal_server_error)
+        when "internal.error"
+          render_error("Internal error occurred during download.", :internal_server_error)
+        else
+          # Success - download_result contains the CDN URL
+          render json: {
+            success: true,
+            download_url: download_result,
+            track_info: {
+              title: track_data["title"],
+              artist: track_data.dig("user", "username"),
+              duration: track_data["duration"],
+              duration_formatted: format_duration(track_data["duration"])
+            }
+          }, status: :ok
+        end
+
+      rescue => e
+        Rails.logger.error "SoundCloud download error: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
+        render_error("Something went wrong while downloading the track.", :internal_server_error)
+      end
+    end
+
     # GET /api/lookup/domain/example.com
     def lookup_domain
       domain = params[:domain]
@@ -153,6 +288,16 @@ module Api
     def render_error(message, status)
       render json: { error: message }, status: status
       nil
+    end
+
+    def format_duration(milliseconds)
+      return "0:00" if milliseconds.nil? || milliseconds == 0
+
+      total_seconds = milliseconds / 1000
+      minutes = total_seconds / 60
+      seconds = total_seconds % 60
+
+      "#{minutes}:#{seconds.to_s.rjust(2, '0')}"
     end
 
     def extract_tld(domain)

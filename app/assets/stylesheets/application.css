@@ -203,17 +203,9 @@ html, body {
 }
 
 .cat-search {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 10px;
-    margin-top: -14px;
-    background-color: transparent;
-    position: relative;
-    z-index: 1;
-    margin-bottom: 2px;
     width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .cat-search-input-group {
@@ -330,23 +322,18 @@ html, body {
 }
 
 .cat-response {
+  margin-top: 2rem;
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 100%;
   max-width: 800px;
-}
-
-.cat-content-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+  margin: 2rem auto 0;
 }
 
 .cat-response-metadata {
-  padding: 1rem;
+  padding: 0.75rem 1.5rem;
   background: rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: grid;

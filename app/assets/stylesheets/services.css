@@ -117,4 +117,171 @@
 .cat-message.error {
     color: #ff4444;
     font-weight: bold;
+}
+
+.cat-soundcloud-track,
+.cat-soundcloud-description,
+.cat-soundcloud-download {
+  border-top: 1px solid #333;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.cat-track-container {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.cat-track-artwork-container {
+  flex-shrink: 0;
+}
+
+.cat-track-artwork {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #444;
+}
+
+.cat-track-artwork-placeholder {
+  width: 120px;
+  height: 120px;
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.cat-track-details {
+  flex-grow: 1;
+}
+
+.cat-track-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff7700;
+  margin-bottom: 0.75rem;
+}
+
+.cat-track-artist,
+.cat-track-duration,
+.cat-track-genre {
+  margin-bottom: 0.35rem;
+}
+
+.cat-track-artist .cat-value {
+  color: #eee;
+  font-weight: bold;
+}
+
+.cat-track-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.cat-track-stats .cat-stat {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cat-track-metadata {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.cat-description-content {
+  margin-top: 0.75rem;
+  color: #ccc;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.cat-download-success,
+.cat-download-error {
+  background-color: #1a1a1a;
+  padding: 1.25rem;
+  border-radius: 4px;
+  border: 1px solid #333;
+  margin-top: 0.75rem;
+}
+
+.cat-download-status {
+  margin-bottom: 0.75rem;
+}
+
+.cat-download-status .cat-value.success {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.cat-download-status .cat-value.error {
+  color: #ff4444;
+  font-weight: bold;
+}
+
+.cat-download-url {
+  margin-bottom: 1.25rem;
+}
+
+.cat-download-url .cat-value {
+  word-break: break-all;
+}
+
+.cat-download-url a {
+  color: #ff7700;
+  text-decoration: none;
+}
+
+.cat-download-url a:hover {
+  text-decoration: underline;
+}
+
+.cat-download-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cat-button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.cat-button-primary {
+  background-color: #ff7700;
+  color: #111;
+  border: 1px solid #ff8800;
+}
+
+.cat-button-primary:hover {
+  background-color: #ff9933;
+}
+
+.cat-button-secondary {
+  background-color: transparent;
+  color: #ff7700;
+  border: 1px solid #ff7700;
+}
+
+.cat-button-secondary:hover {
+  background-color: rgba(255, 119, 0, 0.1);
+}
+
+.cat-download-error-message {
+  color: #ddd;
 } 
